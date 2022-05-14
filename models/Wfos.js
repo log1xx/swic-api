@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
-const UsersSchema = mongoose.Schema({
-    id: {
-        type: String,
-        required: true
-    },
+const WfosSchema = mongoose.Schema({
     wfo: {
         type: String,
         required: true
@@ -14,7 +10,9 @@ const UsersSchema = mongoose.Schema({
         required: true
     },
     locs: {
-        type: String,
+        type: Array,
         required: true
     }
-})
+});
+
+module.exports = mongoose.model('Wfos', WfosSchema);

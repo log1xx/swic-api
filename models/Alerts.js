@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 
-const UsersSchema = mongoose.Schema({
-    id: {
-        type: String,
-        required: true
-    },
+const AlertsSchema = mongoose.Schema({
     sender: {
         type: String,
         required: true
     },
     sent: {
-        type: String,
+        type: Date,
+        required: true
+    },
+    expire: {
+        type: Date,
         required: true
     },
     status: {
@@ -29,12 +29,14 @@ const UsersSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    area: {
-        type: String,
-        required: true
-    },
     web: {
         type: String,
         required: true
+    },
+    locs: {
+        type: Array,
+        required: true
     }
 })
+
+module.exports = mongoose.model('Alerts', AlertsSchema);

@@ -1,13 +1,12 @@
+const express = require('express');
 const mongoose = require('mongoose');
-const app = require('express')();
-const PORT = 8080;
+const app = express();
 require('dotenv/config');
 
 //import routes
 const usersRoute = require('./routes/users');
 const wfoRoute = require('./routes/wfos');
 const alertsRoute = require('./routes/alerts');
-const express = require('express');
 
 //middleware
 app.use(express.json());
@@ -23,6 +22,6 @@ mongoose.connect(process.env.DB_CONNECTION, () =>
 
 //run web server
 app.listen(
-    PORT,
-    () => console.log(`alive on  http://localhost:${PORT}`)
+    process.env.PORT,
+    () => console.log(`alive on  http://localhost:${process.env.PORT}`)
 );
