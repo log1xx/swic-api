@@ -17,6 +17,10 @@ const AlertsSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    validity: {
+        type: Boolean,
+        required: true
+    },
     event: {
         type: String,
         required: true
@@ -31,7 +35,11 @@ const AlertsSchema = mongoose.Schema({
     },
     web: {
         type: String,
-        required: true
+        required: false
+    },
+    image: {
+        type: String,
+        required: false
     },
     locs: {
         type: Array,
