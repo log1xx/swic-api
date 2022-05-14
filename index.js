@@ -7,7 +7,11 @@ require('dotenv/config');
 const usersRoute = require('./routes/users');
 const wfoRoute = require('./routes/wfos');
 const alertsRoute = require('./routes/alerts');
+const express = require('express');
 
+//middleware
+app.use(express.json());
+//middleware routes
 app.use('/users', usersRoute);
 app.use('/wfos', wfoRoute);
 app.use('/alerts', alertsRoute);

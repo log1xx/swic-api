@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const verify = require('./verifyToken');
 
-router.get('/', (req, res) => {
-    res.send('On /wfos');
+router.get('/', verify, (req, res) => {
+    res.send(req.user);
 });
 
 router.get('/:wfo', (req, res) => {
