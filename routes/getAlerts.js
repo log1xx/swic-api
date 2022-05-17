@@ -13,39 +13,57 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:alertId', async (req, res) => {
-    const alert = await Alerts.findOne({_id: req.params.alertId});
-    if (!alert) return res.status(400).send('alert doesnt exist!');
-    else res.json(alert);
+    try {
+        const alert = await Alerts.findOne({_id: req.params.alertId});
+        res.json(alert);
+    } catch (error) {
+        res.status(400).send(error);
+    }
 });
 
 router.get('/bySender/:alertId', async (req, res) => {
-    const alert = await Alerts.findOne({sender: req.params.alertId});
-    if (!alert) return res.status(400).send('No alerts with that sender!');
-    else res.json(alert);
+    try {
+        const alert = await Alerts.find({sender: req.params.alertId});
+        res.json(alert);
+    } catch (error) {
+        res.status(400).send(error);
+    }
 });
 
 router.get('/byStatus/:alertId', async (req, res) => {
-    const alert = await Alerts.findOne({status: req.params.alertId});
-    if (!alert) return res.status(400).send('No alerts with that status!');
-    else res.json(alert);
+    try {
+        const alert = await Alerts.find({status: req.params.alertId});
+        res.json(alert);
+    } catch (error) {
+        res.status(400).send(error);
+    }
 });
 
 router.get('/byValidity/:alertId', async (req, res) => {
-    const alert = await Alerts.findOne({validity: req.params.alertId});
-    if (!alert) return res.status(400).send('No alerts with that validity!');
-    else res.json(alert);
+    try {
+        const alert = await Alerts.find({validity: req.params.alertId});
+        res.json(alert);
+    } catch (error) {
+        res.status(400).send(error);
+    }
 });
 
 router.get('/byEvent/:alertId', async (req, res) => {
-    const alert = await Alerts.findOne({event: req.params.alertId});
-    if (!alert) return res.status(400).send('No alerts with that event!');
-    else res.json(alert);
+    try {
+        const alert = await Alerts.find({event: req.params.alertId});
+        res.json(alert);
+    } catch (error) {
+        res.status(400).send(error);
+    }
 });
 
 router.get('/byLocs/:alertId', async (req, res) => {
-    const alert = await Alerts.findOne({locs: req.params.alertId});
-    if (!alert) return res.status(400).send('No alerts with that location!');
-    else res.json(alert);
+    try {
+        const alert = await Alerts.find({locs: req.params.alertId});
+        res.json(alert);
+    } catch (error) {
+        res.status(400).send(error);
+    }
 });
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const cors = require('cors');
 require('dotenv/config');
 
 //import routes
@@ -11,6 +12,7 @@ const getAlertsRoute = require('./routes/getAlerts');
 
 //middleware
 app.use(express.json());
+app.use(cors());
 //middleware routes
 app.use('/users', usersRoute);
 app.use('/wfos', wfoRoute);

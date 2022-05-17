@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const verify = require('./verifyToken');
 const Alerts = require('../models/Alerts');
+const pushes = require('../pushes');
 
-router.post('/issuealert', async (req, res) => {
+router.post('/issuealert', verify, async (req, res) => {
     const alert = new Alerts({
         sender: req.body.sender,
         sent: new Date,
@@ -20,6 +21,8 @@ router.post('/issuealert', async (req, res) => {
 
     try {
         const savedAlert = await alert.save();
+        console.log(alert);
+        pushes.pushAllAlertsHttp(alert);
         res.send({alert: alert._id});
     } catch (error) {
         res.status(400).send(error);
@@ -27,7 +30,7 @@ router.post('/issuealert', async (req, res) => {
 });
 
 //update an alert
-router.patch('/updatealert/:alertId', async (req, res) => {
+router.patch('/updatealert/:alertId', verify, async (req, res) => {
     try {
         const updatedAlert = await Alerts.updateOne({_id: req.params.alertId}, {$set: {
             sent: new Date,
@@ -39,6 +42,7 @@ router.patch('/updatealert/:alertId', async (req, res) => {
             image: req.body.image,
             locs: req.body.locs
         }});
+        pushes.pushAllAlertsHttp(alert);
         res.json(updatedAlert);
     } catch (error) {
         res.json({message: err});
@@ -46,7 +50,7 @@ router.patch('/updatealert/:alertId', async (req, res) => {
 });
 
 //upgrade an alert
-router.patch('/upgradealert/:alertId', async (req, res) => {
+router.patch('/upgradealert/:alertId', verify, async (req, res) => {
     try {
         const upgradedAlert = await Alerts.updateOne({_id: req.params.alertId}, {$set: {
             sent: new Date,
@@ -58,6 +62,7 @@ router.patch('/upgradealert/:alertId', async (req, res) => {
             image: req.body.image,
             locs: req.body.locs
         }});
+        pushes.pushAllAlertsHttp(alert);
         res.json(upgradedAlert);
     } catch (error) {
         res.json({message: err});
@@ -65,7 +70,7 @@ router.patch('/upgradealert/:alertId', async (req, res) => {
 });
 
 //cancel an alert
-router.patch('/cancelalert/:alertId', async (req, res) => {
+router.patch('/cancelalert/:alertId', verify, async (req, res) => {
     try {
         const canceledAlert = await Alerts.updateOne({_id: req.params.alertId}, {$set: {
             sent: new Date,
@@ -77,6 +82,7 @@ router.patch('/cancelalert/:alertId', async (req, res) => {
             image: req.body.image,
             locs: req.body.locs
         }});
+        pushes.pushAllAlertsHttp(alert);
         res.json(canceledAlert);
     } catch (error) {
         res.json({message: err});
@@ -84,7 +90,7 @@ router.patch('/cancelalert/:alertId', async (req, res) => {
 });
 
 //expire an alert
-router.patch('/expirealert/:alertId', async (req, res) => {
+router.patch('/expirealert/:alertId', verify, async (req, res) => {
     try {
         const expiredAlert = await Alerts.updateOne({_id: req.params.alertId}, {$set: {
             sent: new Date,
@@ -96,6 +102,7 @@ router.patch('/expirealert/:alertId', async (req, res) => {
             image: req.body.image,
             locs: req.body.locs
         }});
+        pushes.pushAllAlertsHttp(alert);
         res.json(expiredAlert);
     } catch (error) {
         res.json({message: err});
@@ -103,7 +110,7 @@ router.patch('/expirealert/:alertId', async (req, res) => {
 });
 
 //delete an alert (THIS SHOULDNT HAVE TO BE USED, ALL ALERTS ARE ARCHIVED)
-router.delete('/deletealert/:alertId', async (req, res) => {
+router.delete('/deletealert/:alertId', verify, async (req, res) => {
     try {
         const removedAlert = await Alerts.deleteOne({_id: req.params.alertId});
         res.json(removedAlert);

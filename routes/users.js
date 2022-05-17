@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const verify = require('./verifyToken');
 const Users = require('../models/Users');
 
 //log user in and return a token
@@ -15,7 +16,7 @@ router.post('/login', async (req, res) => {
     if (!validPassword) return res.status(400).send('invalid password');
 
     const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-    res.header('auth-token', token).send(token);
+    res.header('auth-token', token).send({token: token, wfo: user.wfo});
 });
 
 //log user out and destroy their token
@@ -49,7 +50,7 @@ router.post('/createuser', async (req, res) => {
 });
 
 //update a user
-router.patch('/createuser/:userId', async (req, res) => {
+router.patch('/createuser/:userId', verify, async (req, res) => {
     try {
         const updatedUser = await Users.updateOne({_id: req.params.userId}, {$set: {username: req.body.username, wfo: req.body.wfo, acctype: req.body.acctype}});
         res.json(updatedUser);
@@ -59,7 +60,7 @@ router.patch('/createuser/:userId', async (req, res) => {
 });
 
 //delete a user
-router.delete('/createuser/:userId', async (req, res) => {
+router.delete('/createuser/:userId', verify, async (req, res) => {
     try {
         const removedUser = await Users.deleteOne({_id: req.params.userId});
         res.json(removedUser);
