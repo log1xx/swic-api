@@ -21,7 +21,6 @@ router.post('/issuealert', verify, async (req, res) => {
 
     try {
         const savedAlert = await alert.save();
-        console.log(alert);
         pushes.pushAllAlertsHttp(alert);
         res.send({alert: alert._id});
     } catch (error) {
