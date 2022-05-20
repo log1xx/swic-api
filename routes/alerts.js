@@ -32,19 +32,37 @@ router.post('/issuealert', verify, async (req, res) => {
 router.patch('/updatealert/:alertId', verify, async (req, res) => {
     try {
         const updatedAlert = await Alerts.updateOne({_id: req.params.alertId}, {$set: {
+            sender: req.body.sender,
             sent: new Date,
             expire: req.body.expire,
             status: "updated",
+            validity: true,
+            event: req.body.event,
             headline: req.body.headline,
             desc: req.body.desc,
             web: req.body.web,
             image: req.body.image,
             locs: req.body.locs
         }});
+
+        const alert = new Alerts({
+            sender: req.body.sender,
+            sent: new Date,
+            expire: req.body.expire,
+            status: "updated",
+            validity: true,
+            event: req.body.event,
+            headline: req.body.headline,
+            desc: req.body.desc,
+            web: req.body.web,
+            image: req.body.image,
+            locs: req.body.locs
+        });
+
         pushes.pushAllAlertsHttp(alert);
         res.json(updatedAlert);
     } catch (error) {
-        res.json({message: err});
+        res.status(400).send(error);
     }
 });
 
@@ -55,36 +73,68 @@ router.patch('/upgradealert/:alertId', verify, async (req, res) => {
             sent: new Date,
             expire: req.body.expire,
             status: "upgraded",
+            event: req.body.event,
             headline: req.body.headline,
             desc: req.body.desc,
             web: req.body.web,
             image: req.body.image,
             locs: req.body.locs
         }});
+
+        const alert = new Alerts({
+            sender: req.body.sender,
+            sent: new Date,
+            expire: req.body.expire,
+            status: "upgraded",
+            validity: true,
+            event: req.body.event,
+            headline: req.body.headline,
+            desc: req.body.desc,
+            web: req.body.web,
+            image: req.body.image,
+            locs: req.body.locs
+        });
+
         pushes.pushAllAlertsHttp(alert);
         res.json(upgradedAlert);
     } catch (error) {
-        res.json({message: err});
+        res.status(400).send(error);
     }
 });
 
 //cancel an alert
 router.patch('/cancelalert/:alertId', verify, async (req, res) => {
     try {
-        const canceledAlert = await Alerts.updateOne({_id: req.params.alertId}, {$set: {
+        const cancelledAlert = await Alerts.updateOne({_id: req.params.alertId}, {$set: {
             sent: new Date,
             expire: req.body.expire,
-            status: "canceled",
+            status: "cancelled",
             headline: req.body.headline,
             desc: req.body.desc,
             web: req.body.web,
             image: req.body.image,
             locs: req.body.locs
         }});
+       
+
+        const alert = new Alerts({
+            sender: req.body.sender,
+            sent: new Date,
+            expire: req.body.expire,
+            status: "cancelled",
+            validity: true,
+            event: req.body.event,
+            headline: req.body.headline,
+            desc: req.body.desc,
+            web: req.body.web,
+            image: req.body.image,
+            locs: req.body.locs
+        });
+
         pushes.pushAllAlertsHttp(alert);
-        res.json(canceledAlert);
+        res.json(cancelledAlert);
     } catch (error) {
-        res.json({message: err});
+        res.status(400).send(error);
     }
 });
 
@@ -101,10 +151,25 @@ router.patch('/expirealert/:alertId', verify, async (req, res) => {
             image: req.body.image,
             locs: req.body.locs
         }});
+
+        const alert = new Alerts({
+            sender: req.body.sender,
+            sent: new Date,
+            expire: req.body.expire,
+            status: "expired",
+            validity: true,
+            event: req.body.event,
+            headline: req.body.headline,
+            desc: req.body.desc,
+            web: req.body.web,
+            image: req.body.image,
+            locs: req.body.locs
+        });
+
         pushes.pushAllAlertsHttp(alert);
         res.json(expiredAlert);
     } catch (error) {
-        res.json({message: err});
+        res.status(400).send(error);
     }
 });
 
@@ -114,7 +179,7 @@ router.delete('/deletealert/:alertId', verify, async (req, res) => {
         const removedAlert = await Alerts.deleteOne({_id: req.params.alertId});
         res.json(removedAlert);
     } catch (error) {
-        res.json({message: err});
+        res.status(400).send(error);
     }
 });
 
