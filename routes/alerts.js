@@ -143,7 +143,7 @@ router.patch('/expirealert/:alertId', verify, async (req, res) => {
     try {
         const expiredAlert = await Alerts.updateOne({_id: req.params.alertId}, {$set: {
             sent: new Date,
-            expire: req.body.expire,
+            expire: new Date(req.body.expire).getUTCMilliseconds,
             status: "expired",
             headline: req.body.headline,
             desc: req.body.desc,
